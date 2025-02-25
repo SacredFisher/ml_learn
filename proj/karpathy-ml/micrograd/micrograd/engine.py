@@ -44,11 +44,20 @@ class Value:
             self.grad = other.grad * out.grad  #local derivative is other.grad, * incoming derivative by chain rule
             other.grad = self.grad * out.grad 
 
-        out.backward = _backward 
+        out._backward = _backward 
 
         return out 
     
+    def __tanh__(self): 
+        t = math.tanh(self.data)
+        out = Value(t, _inputs = (self, ), _op = 'tanh()')
 
+        def _backward(): 
+            self.grad = (1 - t**2) * out.grad  
+
+        out._backward = _backward 
+
+        return out 
 
 if __name__ == '__main__': 
     a = Value(1, _label ='a')

@@ -41,3 +41,14 @@ class Neuron(Module):
             raise ValueError('Neuron.non_lin is not one of "tanh", "relu", or "none". please check and try again.')
         
         return f'{name} Neuron({len(self.weights)})'
+    
+
+class Layer(Module): 
+    def __init__(self, fan_in, fan_out, non_lin = 'tanh'):
+        self.Neurons = [Neuron(fan_in, non_lin) for _ in range(fan_out)]
+
+    def parameters(self):
+        return [p for n in self.Neurons for p in n.parameters()]
+    
+
+        
